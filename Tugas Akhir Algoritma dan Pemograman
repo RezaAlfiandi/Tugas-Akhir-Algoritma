@@ -1,0 +1,264 @@
+#include <iostream>
+using namespace std;
+
+int saldo = 1000000;
+
+void header() {
+    cout << "\n\n\n";
+    cout << "\t\t=======================================\n"
+            "\t\t    BANK ITAM BERSATU (BIB)\n"
+            "\t\t=======================================\n\n";
+}
+
+int menu() {
+    int pilihMenu;
+    header();
+    cout << "\t\t1. Transfer Uang\n\n"
+            "\t\t2. Cek Saldo\n\n"
+            "\t\t3. Tarik Uang\n\n"
+            "\t\t4. Setor Uang\n\n"
+            "\t\t5. Top Up\n\n"
+            "\t\t6. Pembayaran UKT\n\n" 
+            "\t\t==============================\n\n";
+    cout << "\t\tPilih: "; cin >> pilihMenu;
+    return pilihMenu;
+}
+
+void inputPin() {
+    int pin;
+    int i = 1;
+    
+    do {
+        header();
+        cout << "\t\tMasukkan Pin\n\n"
+                "\t\t"; cin >> pin;
+    
+        if(pin == 100604) {
+            system("cls");
+            return;
+        } else {
+            cout << "\n\t\t===================================\n\n"
+                    "\t\tPin yang anda masukkan salah!\n\n"
+                    "\t\t=====================================\n\n";
+            system("pause");
+            system("cls");
+            i += 1;
+            if(i > 3) {
+                header();
+                cout << "\n\n\t\tError - Rekening Diblokir\n\n\n\n"
+                        "\t\t=========================================\n\n"
+                        "\t\tKamu Salah Masukkan Pin 3x\n\n"
+                        "\t\t=========================================\n\n";
+                system("pause");
+                exit(0);
+            }
+        }
+    } while(pin != 100604 && i <= 3);
+}
+
+void transferUang() {
+    int noRek, jumlahUang;
+    header();
+    cout << "\t\tMasukkan No Rek yang dituju\n\n"
+            "\t\t"; cin >> noRek;
+    system("cls");
+    header();
+    cout << "\t\tMasukkan Nominal\n\n"
+            "\t\tRp. "; cin >> jumlahUang;
+            
+    system("cls");
+    header();
+    
+    if (jumlahUang > saldo) {
+        cout << "\t\tSaldo kamu tidak mencukupi\n\n";
+        cout << "\t\tSisa Saldo: Rp. " << saldo << "\n\n";
+    } else {
+        int saldoSebelum = saldo;
+        saldo -= jumlahUang;
+        int saldoSesudah = saldo;
+        cout << "\t\tTransaksi Berhasil\n\n"
+                "\t\tNo Rek: " << noRek << "\n"
+                "\t\tNominal Uang: Rp. " << jumlahUang << "\n\n";
+        cout << "\t\t==============================================\n\n";
+        cout << "\t\tBUKTI TRANSFER\n\n"
+                "\t\tDari Rekening: 1234567890\n"
+                "\t\tKe Rekening: " << noRek << "\n"
+                "\t\tNominal: Rp. " << jumlahUang << "\n"
+                "\t\tSaldo Sebelum: Rp. " << saldoSebelum << "\n"
+                "\t\tSaldo Sesudah: Rp. " << saldoSesudah << "\n"
+                "\t\t==============================================\n\n";
+        cout << "\t\tSisa Saldo: Rp. " << saldoSesudah << "\n\n";
+    }
+}
+
+void cekSaldo() {
+    header();
+    cout << "\t\tSisa Saldo Anda: Rp. " << saldo << "\n\n";
+    cout << "\t\t==============================================\n\n";
+}
+
+void tarikUang() {
+    int tarik, nominal;
+    header();
+    cout << "\t\t[1] 100.000\t\t[3] 300.000\n\n"
+             "\t\t[2] 200.000\t\t[4] 500.000\n\n"
+             "\t\t[5] Tulis Nominal\n\n"
+             "\t\t====================================\n\n"
+             "\t\tPilih: "; cin >> tarik;
+    
+    switch(tarik) {
+        case 1: tarik = 100000; break;
+        case 2: tarik = 200000; break;
+        case 3: tarik = 300000; break;
+        case 4: tarik = 500000; break;
+        case 5: 
+            system("cls");
+            header();
+            cout << "\t\tMasukkan Nominal: Rp. "; cin >> nominal;
+            tarik = nominal;
+            break;
+        default:
+            cout << "\t\tPilihan tidak valid\n\n";
+            return;
+    }
+    
+    system("cls");
+    header();
+    if (saldo < tarik) {
+        cout << "\t\tSaldo Kamu Tidak Mencukupi\n\n"
+                "\t\t========================================\n\n";
+        cout << "\t\tSisa Saldo: Rp. " << saldo << "\n\n"
+                "\t\t========================================\n\n";                
+    } else {
+        saldo -= tarik;
+        cout << "\t\tTarik Tunai Berhasil\n\n"
+                "\t\t========================================\n\n"
+                "\t\tNominal Uang: Rp. " << tarik << "\n\n"
+                "\t\t========================================\n\n";    
+        cout << "\t\tSisa Saldo: Rp. " << saldo << "\n\n";
+    }
+}
+
+void setorUang() {
+    int nominalUang;
+    header();
+    cout << "\t\tMasukkan Nominal Uang: Rp. "; cin >> nominalUang;
+    saldo += nominalUang;
+    
+    system("cls");
+    header();
+    cout << "\t\t========================================\n\n"
+            "\t\tBerhasil Setor Tunai\n\n"
+            "\t\t========================================\n\n"
+            "\t\tNominal Uang: Rp. " << nominalUang << "\n\n"
+            "\t\t========================================\n\n";    
+    cout << "\t\tSisa Saldo: Rp. " << saldo << "\n\n";
+}
+
+void topUpSaldo() {
+    int provider, nominalTopUp;
+    string phoneNumber;
+
+    header();
+    cout << "\t\tPilih Provider:\n\n"
+            "\t\t1. Dana\n"
+            "\t\t2. Shopee\n"
+            "\t\tPilihan: "; cin >> provider;
+
+    system("cls");
+    header();
+    cout << "\t\tMasukkan Nomor Telepon: "; cin >> phoneNumber;
+
+    system("cls");
+    header();
+    cout << "\t\tMasukkan Nominal Top Up: Rp. "; cin >> nominalTopUp;
+
+    system("cls");
+    header();
+    if (nominalTopUp > saldo) {
+        cout << "\t\tSaldo kamu tidak mencukupi\n\n";
+        cout << "\t\tSisa Saldo: Rp. " << saldo << "\n\n";
+    } else {
+        saldo -= nominalTopUp;
+        cout << "\t\tTop Up Berhasil\n\n"
+                "\t\tNomor Telepon: " << phoneNumber << "\n"
+                "\t\tNominal Top Up: Rp. " << nominalTopUp << "\n\n";
+        cout << "\t\t==============================================\n\n";
+        cout << "\t\tSisa Saldo: Rp. " << saldo << "\n\n";
+    }
+}
+
+void PembayaranUKT() {
+    int nominalUKT, pilihanUniversitas;
+    header();
+    cout << "\t\tPilih Universitas:\n\n"
+            "\t\t1. Universitas UNRI\n"
+            "\t\t2. Universitas UIN SUSKA RIAU\n"
+            "\t\t3. Universitas UIR\n\n"
+            "\t\tPilihan: "; cin >> pilihanUniversitas;
+    
+    system("cls");
+    header();
+    cout << "\t\tMasukkan Nominal Pembayaran UKT: Rp. "; cin >> nominalUKT;
+
+    system("cls");
+    header();
+    if (nominalUKT > saldo) {
+        cout << "\t\tSaldo kamu tidak mencukupi\n\n";
+        cout << "\t\tSisa Saldo: Rp. " << saldo << "\n\n";
+    } else {
+        saldo -= nominalUKT;
+        cout << "\t\tPembayaran UKT Berhasil\n\n"
+                "\t\tUniversitas: ";
+        switch (pilihanUniversitas) {
+            case 1: cout << "Universitas UNRI"; break;
+            case 2: cout << "Universitas UIN SUSKA RIAU"; break;
+            case 3: cout << "Universitas UIR"; break;
+            default: cout << "Pilihan tidak valid"; break;
+        }
+        cout << "\n\t\tNominal Pembayaran: Rp. " << nominalUKT << "\n\n";
+        cout << "\t\t==============================================\n\n";
+        cout << "\t\tSisa Saldo: Rp. " << saldo << "\n\n";
+    }
+}
+
+int main() {
+    inputPin();
+    int pilihMenu;
+    
+menuUlang:
+    system("cls");
+    do {
+        pilihMenu = menu();
+        system("cls");
+        header();
+        switch(pilihMenu) {
+            case 1: transferUang(); break;
+			case 2: cekSaldo(); break;
+			case 3: tarikUang(); break;
+			case 4: setorUang(); break;
+			case 5: topUpSaldo(); break; 
+			case 6: PembayaranUKT(); break;
+			default: 
+				cout << "\t\tPilihan tidak valid\n";
+				break;
+		}
+	} while (pilihMenu > 6 || pilihMenu < 1);
+		
+	system("pause");
+	system("cls");
+	
+	header();
+	int pilih;
+	cout << "\t\tIngin melakukan transaksi kembali?\n\n"
+			"\t\t1. Ya\t\t2. Tidak\n\n"
+			"\t\t============================================\n\n"
+			"\t\tPilih: "; cin >> pilih;
+	if (pilih == 1){
+		goto menuUlang;
+	} else {
+		exit(0);
+	}
+		
+	return 0;
+}
